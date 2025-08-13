@@ -1,0 +1,62 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "courses"
+    label: "Courses"
+    folder: "content/courses"
+    create: true
+    slug: "{{slug}}"
+    extension: "mdx"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Category", name: "category", widget: "string"}
+      - {label: "Duration", name: "duration", widget: "string"}
+      - {label: "Fee", name: "fee", widget: "string"}
+      - {label: "Next Batch", name: "nextBatch", widget: "string", required: false}
+      - {label: "Excerpt", name: "excerpt", widget: "text", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "events"
+    label: "Events"
+    folder: "content/events"
+    create: true
+    slug: "{{slug}}"
+    extension: "mdx"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "string"}
+      - {label: "Mode", name: "mode", widget: "string"}
+      - {label: "Location", name: "location", widget: "string", required: false}
+      - {label: "Excerpt", name: "excerpt", widget: "text", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+
+  - name: "testimonials"
+    label: "Testimonials"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Course", name: "course", widget: "string", required: false}
+      - {label: "Quote", name: "quote", widget: "text"}
+
+  - name: "results"
+    label: "Results & Selections"
+    folder: "content/results"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Student Name", name: "studentName", widget: "string"}
+      - {label: "Exam", name: "exam", widget: "string"}
+      - {label: "Year", name: "year", widget: "number"}
+      - {label: "Score/Rank", name: "score", widget: "string", required: false}
+      - {label: "Image", name: "image", widget: "image", required: false}
