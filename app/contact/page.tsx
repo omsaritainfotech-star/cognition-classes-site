@@ -1,12 +1,39 @@
-export const metadata = { title: 'Contact' };
+"use client";
 
-export default function ContactPage(){
+import { useState } from "react";
+
+export const metadata = { title: "Contact" };
+
+export default function ContactPage() {
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("submitting");
+    const form = e.currentTarget;
+    const body = new URLSearchParams(new FormData(form) as any).toString();
+
+    try {
+      const res = await fetch("/__forms.html", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  };
+
   return (
     <section className="section">
       <div className="container-max max-w-3xl">
         <h1 className="h1">Contact Us</h1>
         <p className="p mt-3">We usually reply within the same day.</p>
-        <form name="contact" method="POST" data-netlify="true" className="card mt-6 space-y-4">
+
+        <form name="contact" onSubmit={handleSubmit} className="card mt-6 space-y-4">
           <input type="hidden" name="form-name" value="contact" />
           <div>
             <label className="block text-sm font-medium">Name</label>
@@ -37,10 +64,15 @@ export default function ContactPage(){
             <textarea name="message" className="mt-1 w-full border rounded-xl p-3" rows={5}></textarea>
           </div>
           <div className="flex gap-3">
-            <button className="btn btn-primary" type="submit">Send Message</button>
+            <button className="btn btn-primary" type="submit" disabled={status === "submitting"}>
+              {status === "submitting" ? "Sending..." : "Send Message"}
+            </button>
             <a className="btn" href="https://wa.me/919040760487" target="_blank" rel="noreferrer">Chat on WhatsApp</a>
           </div>
         </form>
+
+        {status === "success" && <p className="p mt-4 text-emerald-600">Thanks! We’ve received your message.</p>}
+        {status === "error" && <p className="p mt-4 text-rose-600">Sorry, something went wrong. Please try again.</p>}
       </div>
     </section>
   );
