@@ -4,8 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cognition CMS</title>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
   <body>
+    <!-- Root container (helps Decap avoid timing issues) -->
+    <div id="nc-root"></div>
+
+    <!-- Netlify Identity widget (for /admin login) -->
+    <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Decap CMS (deferred so <body> exists when it runs) -->
+    <script defer src="https://unpkg.com/decap-cms@3.8.3/dist/decap-cms.js"></script>
+
+    <!-- Optional: after login, refresh /admin -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on("init", (user) => {
+            if (!user) {
+              window.netlifyIdentity.on("login", () => window.location.reload());
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
