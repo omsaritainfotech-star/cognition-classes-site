@@ -2,8 +2,11 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/uploads"
-public_folder: "/uploads"
+media_folder: "public/uploads"   # files saved in repo
+public_folder: "/uploads"        # how they’re referenced by the site
+
+# optional but nice; enables draft → review → publish
+publish_mode: editorial_workflow
 
 collections:
   - name: "courses"
@@ -11,30 +14,31 @@ collections:
     folder: "content/courses"
     create: true
     slug: "{{slug}}"
-    extension: "mdx"
+    extension: "md"
+    format: "frontmatter"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Category", name: "category", widget: "string"}
-      - {label: "Duration", name: "duration", widget: "string"}
-      - {label: "Fee", name: "fee", widget: "string"}
-      - {label: "Next Batch", name: "nextBatch", widget: "string", required: false}
-      - {label: "Excerpt", name: "excerpt", widget: "text", required: false}
-      - {label: "Body", name: "body", widget: "markdown"}
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Category", name: "category", widget: "string", default: "Software Dev" }
+      - { label: "Duration", name: "duration", widget: "string", default: "3 months" }
+      - { label: "Fee", name: "fee", widget: "string", default: "₹—" }
+      - { label: "Next Batch", name: "nextBatch", widget: "string", required: false }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "events"
     label: "Events"
     folder: "content/events"
     create: true
     slug: "{{slug}}"
-    extension: "mdx"
+    extension: "md"
+    format: "frontmatter"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Date", name: "date", widget: "string"}
-      - {label: "Mode", name: "mode", widget: "string"}
-      - {label: "Location", name: "location", widget: "string", required: false}
-      - {label: "Excerpt", name: "excerpt", widget: "text", required: false}
-      - {label: "Body", name: "body", widget: "markdown"}
-
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Mode", name: "mode", widget: "select", options: ["Online", "Offline"], default: "Online" }
+      - { label: "Location", name: "location", widget: "string", required: false }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "testimonials"
     label: "Testimonials"
@@ -42,10 +46,12 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: "md"
+    format: "frontmatter"
+    identifier_field: "name"
     fields:
-      - {label: "Name", name: "name", widget: "string"}
-      - {label: "Course", name: "course", widget: "string", required: false}
-      - {label: "Quote", name: "quote", widget: "text"}
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Course", name: "course", widget: "string", required: false }
+      - { label: "Quote", name: "quote", widget: "text" }
 
   - name: "results"
     label: "Results & Selections"
@@ -53,10 +59,11 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: "md"
+    format: "frontmatter"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Student Name", name: "studentName", widget: "string"}
-      - {label: "Exam", name: "exam", widget: "string"}
-      - {label: "Year", name: "year", widget: "number"}
-      - {label: "Score/Rank", name: "score", widget: "string", required: false}
-      - {label: "Image", name: "image", widget: "image", required: false}
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Student Name", name: "studentName", widget: "string" }
+      - { label: "Exam", name: "exam", widget: "string" }
+      - { label: "Year", name: "year", widget: "number" }
+      - { label: "Score/Rank", name: "score", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
