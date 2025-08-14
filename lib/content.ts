@@ -2,6 +2,16 @@ import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 
+// Safely list directory contents; return [] if the folder doesn't exist.
+async function safeReaddir(dir: string): Promise<string[]> {
+  try {
+    return await fs.readdir(dir);
+  } catch (e: any) {
+    if (e?.code === 'ENOENT') return []; // folder missing = treat as empty
+    throw e;
+  }
+}
+
 export type Course = {
   slug: string;
   title: string;
@@ -24,10 +34,12 @@ export type Event = {
 
 const contentDir = (p: string) => path.join(process.cwd(), 'content', p);
 
+/* -------------------- Courses -------------------- */
 export async function getAllCourses(): Promise<Course[]> {
   const dir = contentDir('courses');
-  const files = await fs.readdir(dir);
-  const mdFiles = files.filter(f => f.endsWith('.md'));
+  const files = await safeReaddir(dir);
+  const mdFiles = files.filter((f) => f.endsWith('.md'));
+
   const items: Course[] = [];
   for (const file of mdFiles) {
     const raw = await fs.readFile(path.join(dir, file), 'utf-8');
@@ -43,7 +55,9 @@ export async function getAllCourses(): Promise<Course[]> {
       excerpt: data.excerpt,
     });
   }
-  return items.sort((a,b)=> (a.category+b.title).localeCompare(b.category+a.title));
+  return items.sort((a, b) =>
+    (a.category + b.title).localeCompare(b.category + a.title)
+  );
 }
 
 export async function getCourse(slug: string) {
@@ -53,10 +67,12 @@ export async function getCourse(slug: string) {
   return { frontmatter: data, content };
 }
 
+/* -------------------- Events -------------------- */
 export async function getAllEvents(): Promise<Event[]> {
   const dir = contentDir('events');
-  const files = await fs.readdir(dir);
-  const mdFiles = files.filter(f => f.endsWith('.md'));
+  const files = await safeReaddir(dir);
+  const mdFiles = files.filter((f) => f.endsWith('.md'));
+
   const items: Event[] = [];
   for (const file of mdFiles) {
     const raw = await fs.readFile(path.join(dir, file), 'utf-8');
@@ -70,7 +86,7 @@ export async function getAllEvents(): Promise<Event[]> {
       excerpt: data.excerpt,
     });
   }
-  return items.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+  return items.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
 
 export async function getEvent(slug: string) {
@@ -80,7 +96,7 @@ export async function getEvent(slug: string) {
   return { frontmatter: data, content };
 }
 
-
+/* -------------------- Testimonials -------------------- */
 export type Testimonial = {
   name: string;
   course?: string;
@@ -89,18 +105,19 @@ export type Testimonial = {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   const dir = path.join(process.cwd(), 'content', 'testimonials');
-  const files = await fs.readdir(dir);
-  const mdFiles = files.filter(f=>f.endsWith('.md'));
+  const files = await safeReaddir(dir);
+  const mdFiles = files.filter((f) => f.endsWith('.md'));
+
   const items: Testimonial[] = [];
-  for (const file of mdFiles){
+  for (const file of mdFiles) {
     const raw = await fs.readFile(path.join(dir, file), 'utf-8');
-    const { data } = require('gray-matter')(raw);
+    const { data } = matter(raw);
     items.push({ name: data.name, course: data.course, quote: data.quote });
   }
   return items;
 }
 
-
+/* -------------------- Results -------------------- */
 export type ResultItem = {
   slug: string;
   title: string;
@@ -113,12 +130,12 @@ export type ResultItem = {
 
 export async function getAllResults(): Promise<ResultItem[]> {
   const dir = path.join(process.cwd(), 'content', 'results');
-  const files = await fs.readdir(dir);
-  const mdFiles = files.filter(f=>f.endsWith('.md'));
+  const files = await safeReaddir(dir);
+  const mdFiles = files.filter((f) => f.endsWith('.md'));
+
   const items: ResultItem[] = [];
-  for (const file of mdFiles){
+  for (const file of mdFiles) {
     const raw = await fs.readFile(path.join(dir, file), 'utf-8');
-    const matter = (await import('gray-matter')).default;
     const { data } = matter(raw);
     items.push({
       slug: file.replace(/\.md$/, ''),
@@ -127,17 +144,16 @@ export async function getAllResults(): Promise<ResultItem[]> {
       exam: data.exam || '',
       year: Number(data.year || 0),
       score: data.score,
-      image: data.image
+      image: data.image,
     });
   }
   // Newest (by year) first
-  return items.sort((a,b)=> b.year - a.year);
+  return items.sort((a, b) => b.year - a.year);
 }
 
-export async function getResult(slug: string){
+export async function getResult(slug: string) {
   const p = path.join(process.cwd(), 'content', 'results', `${slug}.md`);
   const raw = await fs.readFile(p, 'utf-8');
-  const matter = (await import('gray-matter')).default;
   const { data, content } = matter(raw);
   return { frontmatter: data, content };
 }
