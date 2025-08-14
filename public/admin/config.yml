@@ -65,3 +65,21 @@ collections:
       - { label: "Year", name: "year", widget: "number" }
       - { label: "Score/Rank", name: "score", widget: "string", required: false }
       - { label: "Image", name: "image", widget: "image", required: false }
+  - name: "site"
+    label: "Site Content"
+    files:
+      - label: "Home"
+        name: "home"
+        file: "content/site/home.md"
+        format: "frontmatter"
+        fields:
+          - { label: "Title Prefix", name: "title_prefix", widget: "string" }
+          - { label: "Title Highlight", name: "title_highlight", widget: "string" }
+          - { label: "Title Suffix", name: "title_suffix", widget: "string" }
+          - { label: "Subtitle", name: "subtitle", widget: "text", required: false }
+          - { label: "Hero Image", name: "image", widget: "image", required: false }
+          - { label: "Badges", name: "badges", widget: "list", required: false }
+          - { label: "Primary CTA Label", name: "primary_cta_label", widget: "string", required: false }
+          - { label: "Primary CTA Link", name: "primary_cta_href", widget: "string", required: false }
+          - { label: "Secondary CTA Label", name: "secondary_cta_label", widget: "string", required: false }
+          - { label: "Secondary CTA Link", name: "secondary_cta_href", widget: "string", required: false }

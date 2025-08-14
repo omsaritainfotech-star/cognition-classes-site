@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero';
+import { getHomeSettings } from '@/lib/site';
 import SectionTitle from '@/components/SectionTitle';
 import CourseCard from '@/components/CourseCard';
 import EventCard from '@/components/EventCard';
@@ -8,13 +9,14 @@ import { getAllCourses, getAllEvents, getTestimonials, getAllResults } from '@/l
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 
 export default async function HomePage(){
+  const home = await getHomeSettings();
   const courses = await getAllCourses();
   const events = await getAllEvents();
   const testimonials = await getTestimonials();
   const results = await getAllResults();
   return (
     <>
-      <Hero />
+      <Hero settings={home} />
       <section className="section">
         <div className="container-max">
           <SectionTitle title="Trending Courses" subtitle="Industry-ready, project-based learning."/>
