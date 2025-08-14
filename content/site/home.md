@@ -4,7 +4,7 @@ title_highlight: Maths & Software Development
 title_suffix: from pros who build for real.
 subtitle: Since 2015 in Jharsuguda. Founded by Nitesh Agrawal (B.Tech CSE, NIT
   Rourkela; ex-Microsoft). Live classes, projects, and result-driven learning.
-image: /uploads/hero.jpg
+image: /uploads/maxresdefault.jpg
 badges:
   - WebsiteDeevelopment
   - Flutter
