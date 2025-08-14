@@ -1,11 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: omsaritainfotech-star/cognition-classes-site
   branch: main
-
-media_folder: "public/uploads"   # files saved in repo
-public_folder: "/uploads"        # how they’re referenced by the site
-
-# optional but nice; enables draft → review → publish
+media_folder: "public/uploads"
+public_folder: "/uploads"
 publish_mode: editorial_workflow
 
 collections:
